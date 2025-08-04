@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  article {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    padding: 20px;
+  }
+
+  .car-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .car-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .car-details {
+    padding: 20px;
+  }
+
+  .car-details h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #ffffff;
+  }
+
+  .car-details p {
+    margin: 5px 0;
+    font-size: 18px;
+    color: #ffffff;
+  }
+
+  .car-details p strong {
+    color: #ffffff;
+  }
+
+  .car-details .description {
+    max-height: 60px; /* Limita a altura da descrição */
+    overflow: hidden;
+    position: relative;
+  }
+
+  .car-details .description.expanded {
+    max-height: none; /* Permite a descrição expandir completamente */
+  }
+
+  .show-more {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  .show-more:hover {
+    color: #000080;
+  }
+
+  .button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .edit-btn {
+    background-color: #4caf50;
+  }
+
+  .delete-btn {
+    background-color: #f44336;
+  }
+
+</style>
+
+<article>
+  <div class="container">
+    <div class="car-container">
+      {% if object.photo %}
+        <img src="{{ object.photo.url }}" class="d-block w-100" alt="{{ object.model }} - {{ object.brand }}">
+      {% else %}
+        <img src="/media/cars/image_not_found.jpg" class="d-block w-100" alt="{{ object.brand }} {{ object.model }}">
+      {% endif %} 
+      <h2>{{ object.brand }} {{ object.model }}</h2>
+      <p><strong>Ano de fabricação:</strong> {{ object.factory_year }}</p>
+      <p><strong>Ano do modelo:</strong> {{ object.model_year }}</p>
+      <p><strong>Placa:</strong> {{ object.plate }}</p>
+      <p><strong>Preço:</strong> R$ {{ object.value|floatformat:"2g" }}</p>
+      {% if object.bio %}
+        <p> {{ object.bio }}</p>
+      {% endif %}
+  </div>
+
+  {% if user.is_authenticated %}
+  <div class="buttons-container">
+    <a href="{% url 'car_update' pk=object.pk %}" class="btn btn-primary">Editar</a>
+    <a href="{% url 'car_delete' pk=object.pk %}" class="btn btn-danger">Deletar</a>
+  </div>
+  {% endif %}
+{% endblock %}

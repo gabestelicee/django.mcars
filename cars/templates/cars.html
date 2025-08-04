@@ -1,0 +1,223 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+  .hero-carousel {
+    position: relative;
+    text-align: center;
+    color: white;
+  }
+
+  .hero-carousel .carousel-item {
+    height: 70vh;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .hero-carousel .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Overlay escura */
+  }
+
+  .hero-carousel h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    z-index: 2;
+    position: relative;
+  }
+
+  .hero-carousel p {
+    font-size: 24px;
+    margin-bottom: 40px;
+    z-index: 2;
+    position: relative;
+  }
+
+  .hero-carousel a {
+    background-color: #000080	;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+    z-index: 2;
+    position: relative;
+  }
+
+  .hero-carousel a:hover {
+    background-color: #191970;
+  }
+
+  .search-bar {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+  }
+
+  .search-bar input[type="text"] {
+    padding: 10px;
+    font-size: 18px;
+    width: 100%;
+    max-width: 300px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .search-bar input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #000080	;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
+  .search-bar input[type="submit"]:hover {
+    background-color: #191970;
+  }
+
+  .car-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .car-card:hover {
+    transform: scale(1.05);
+  }
+
+  .car-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .car-card h2 {
+    font-size: 20px;
+    margin: 15px 0;
+    color: #333;
+  }
+
+  .car-card p {
+    font-size: 16px;
+    color: #666;
+    margin: 5px 0;
+  }
+
+  .car-card .price {
+    font-size: 22px;
+    color: #000080	;
+    margin: 10px 0;
+  }
+
+  .car-card a {
+    display: block;
+    padding: 10px;
+    background-color: #000080	;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 0 0 8px 8px;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .car-card a:hover {
+    background-color: #191970;
+  }
+</style>
+
+<div
+  id="heroCarousel"
+  class="carousel slide hero-carousel"
+  data-bs-ride="carousel"
+>
+  <div class="carousel-inner">
+    <div
+      class="carousel-item active"
+      style="background-image: url('/media/cars/Chevrolet-Camaro-Pricing-lg.jpg')"
+    >
+      <div class="overlay"></div>
+      <div class="carousel-caption d-flex flex-column justify-content-center">
+        <h1>Bem-vindo à JP Veículos</h1>
+        <p>Encontre o carro dos seus sonhos com as melhores ofertas</p>
+        <a href="/cars">Ver Carros</a>
+      </div>
+    </div>
+    <div
+      class="carousel-item"
+      style="background-image: url('/media/cars/BMW-Serie-3.jpg')"
+    >
+      <div class="overlay"></div>
+      <div class="carousel-caption d-flex flex-column justify-content-center">
+        <h1>Qualidade e Confiabilidade</h1>
+        <p>Carros revisados e garantidos para sua segurança</p>
+        <a href="/cars">Ver Carros</a>
+      </div>
+    </div>
+    <div
+      class="carousel-item"
+      style="background-image: url('/media/cars/2020-Chevrolet-Corvette-Stingray-best.jpg')"
+    >
+      <div class="overlay"></div>
+      <div class="carousel-caption d-flex flex-column justify-content-center">
+        <h1>Variedade de Modelos</h1>
+        <p>Encontre o modelo ideal para o seu estilo de vida</p>
+        <a href="/cars">Ver Carros</a>
+      </div>
+    </div>
+  </div>
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#heroCarousel"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Anterior</span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#heroCarousel"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Próximo</span>
+  </button>
+</div>
+
+<form method="get">
+  <div class="search-bar">
+    <input type="text" name="search" placeholder="Busque por Carro ou Marca" />
+    <input type="submit" value="Buscar" />
+  </div>
+  
+
+  <div class="container">
+  <div class="row" id="carros">
+    {% for car in cars %}
+    <div class="col-md-4 col-sm-6 mb-4">
+      <div class="car-card">
+        {% if car.photo %}
+          <img src="{{ car.photo.url }}" alt="{{ car.model }}" />
+        {% else %}
+          <img src="/media/cars/image_not_found.jpg" class="d-block w-100" alt="{{ object.brand }} {{ object.model }}">
+        {% endif %}  
+        <h2>{{ car.brand }} {{ car.model }}</h2>
+        <p>{{ car.factory_year }} - {{ car.model_year }}</p>
+        <p class="price">R$ {{ car.value|floatformat:"2g" }}</p>
+        <a href="{% url 'car_detail' pk=car.pk %}">Detalhes</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
